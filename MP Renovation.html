@@ -1,0 +1,784 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+.lp{
+  --navy:#1F3249; --navy-900:#16253A; --navy-800:#1B2C40; --navy-700:#27425F;
+  --gold:#B08B5B; --gold-600:#9A774A; --gold-300:#C9A87E; --gold-100:#EADFCF;
+  --bg:#FDFCFB; --surface:#FFFFFF; --text:#1F3249; --text-2:#5A6B7F;
+  --line:#E0D5C7; --line-soft:#EFE9E1;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --font-d:'Urbanist',sans-serif; --font-b:'Work Sans',sans-serif;
+  --maxw:1280px;
+  --fs-display:clamp(2.9rem,7vw,6.25rem);
+  --fs-h1:clamp(2.3rem,5vw,4.25rem);
+  --fs-h2:clamp(1.9rem,3.6vw,3.15rem);
+  --fs-h3:clamp(1.3rem,2vw,1.8rem);
+  --fs-lead:clamp(1.05rem,1.35vw,1.3rem);
+  font-family:var(--font-b); color:var(--text); background:var(--bg);
+  line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+/* ============ RESET (scoped) ============ */
+.lp *,.lp *::before,.lp *::after{box-sizing:border-box}
+.lp h1,.lp h2,.lp h3,.lp h4,.lp p,.lp figure,.lp ul{margin:0;padding:0}
+.lp ul{list-style:none}
+.lp img{max-width:100%;display:block}
+.lp h1,.lp h2,.lp h3,.lp h4{font-family:var(--font-d);line-height:1.04;letter-spacing:-.02em;color:var(--navy);font-weight:800}
+.lp ::selection{background:var(--gold);color:#fff}
+.lp{scroll-behavior:smooth}
+/* ============ LINKS & BUTTONS (Elementor theme-proof) ============ */
+.lp a{color:var(--gold);text-decoration:none;transition:color .25s var(--ease)}
+.lp a:hover,.lp a:focus,.lp a:active{color:var(--gold-600)!important;text-decoration:none!important}
+.lp a:visited{color:var(--gold)!important}
+.lp button{font-family:var(--font-d);cursor:pointer;border:0;background:none;color:inherit}
+.lp button:hover,.lp button:focus{color:inherit}
+.lp :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+/* ============ LAYOUT ============ */
+.lp .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;width:100%}
+.lp .sec{padding:clamp(72px,11vw,150px) 0;position:relative;scroll-margin-top:86px}
+.lp .eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:var(--font-d);font-weight:700;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-600)}
+.lp .eyebrow::before{content:none}
+.lp .eyebrow .eb-line{width:34px;height:1px;background:var(--gold);opacity:.6}
+.lp .sec-head{max-width:760px;margin-bottom:clamp(40px,5vw,68px)}
+.lp .sec-head h2{font-size:var(--fs-h2);margin:20px 0 0;text-wrap:balance}
+.lp .sec-head p{color:var(--text-2);font-size:var(--fs-lead);margin-top:20px;max-width:60ch;text-wrap:pretty}
+/* ============ BUTTONS ============ */
+.lp .btn{display:inline-flex;align-items:center;justify-content:center;gap:11px;font-family:var(--font-d);font-weight:700;font-size:.95rem;letter-spacing:.04em;text-transform:uppercase;padding:17px 30px;border-radius:3px;background:var(--gold);color:#fff!important;transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .25s var(--ease);box-shadow:0 8px 24px -10px rgba(176,139,91,.7);position:relative;overflow:hidden}
+.lp .btn svg{width:17px;height:17px;transition:transform .35s var(--ease)}
+.lp .btn:hover{background:var(--gold-600)!important;color:#fff!important;transform:translateY(-3px);box-shadow:0 16px 34px -12px rgba(176,139,91,.85)}
+.lp .btn:hover svg{transform:translateX(5px)}
+.lp .btn--ghost{background:transparent;color:var(--navy)!important;border:1.5px solid var(--line);box-shadow:none}
+.lp .btn--ghost:hover{background:var(--navy)!important;color:#fff!important;border-color:var(--navy);transform:translateY(-3px)}
+.lp .btn--light{background:#fff;color:var(--navy)!important;box-shadow:0 8px 24px -12px rgba(0,0,0,.4)}
+.lp .btn--light:hover{background:var(--gold)!important;color:#fff!important}
+.lp .btn--lg{padding:20px 38px;font-size:1rem}
+.lp .link-arrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-d);font-weight:700;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--navy)!important}
+.lp .link-arrow svg{width:15px;height:15px;transition:transform .3s var(--ease)}
+.lp .link-arrow:hover{color:var(--gold-600)!important}
+.lp .link-arrow:hover svg{transform:translateX(5px)}
+/* ============ PLACEHOLDER IMAGE ============ */
+.lp .ph{position:relative;overflow:hidden;background:var(--navy-900);border-radius:4px;display:flex;align-items:center;justify-content:center;isolation:isolate}
+.lp .ph::after{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 26px);z-index:0}
+.lp .ph--light{background:linear-gradient(145deg,var(--gold-100),#F4ECE0)}
+.lp .ph--navy{background:linear-gradient(150deg,var(--navy-800),var(--navy-900))}
+.lp .ph.has-img::after{display:none}
+.lp .ph .site-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.lp .ph-lbl{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:24px;color:rgba(255,255,255,.62)}
+.lp .ph--light .ph-lbl{color:var(--gold-600)}
+.lp .ph-lbl svg{width:34px;height:34px;opacity:.7}
+.lp .ph-lbl span{font-family:var(--font-d);font-weight:700;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase}
+.lp .ph-lbl small{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;opacity:.7;font-family:var(--font-d)}
+/* ============ NAV ============ */
+.lp .nav{position:fixed;top:0;left:0;right:0;z-index:90;transition:background .4s var(--ease),box-shadow .4s var(--ease),padding .4s var(--ease);padding:18px 0}
+.lp .nav.is-solid{background:rgba(253,252,251,.92);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line-soft);padding:11px 0}
+.lp .nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.lp .logo{display:flex;align-items:center}
+.lp .logo img{height:52px;width:auto;transition:height .4s var(--ease)}
+.lp .logo-dark{display:none}
+.lp .nav.is-solid .logo-light{display:none}
+.lp .nav.is-solid .logo-dark{display:block}
+.lp .nav.is-solid .logo img{height:44px}
+.lp .nav-links{display:none;align-items:center;gap:30px}
+.lp .nav-links a{font-family:var(--font-d);font-weight:600;font-size:.92rem;color:var(--navy)!important;letter-spacing:.01em;position:relative;padding:4px 0}
+.lp .nav:not(.is-solid) .nav-links a{color:rgba(255,255,255,.9)!important;text-shadow:0 1px 10px rgba(13,21,33,.38)}
+.lp .nav-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--gold);transition:width .3s var(--ease)}
+.lp .nav-links a:hover{color:var(--gold-600)!important}
+.lp .nav:not(.is-solid) .nav-links a:hover{color:#fff!important}
+.lp .nav-links a:hover::after{width:100%}
+.lp .nav.is-over .logo,.lp .nav.is-over .nav-links a{} /* hooks */
+.lp .nav-cta{display:none;align-items:center;gap:18px}
+.lp .nav-phone{font-family:var(--font-d);font-weight:700;font-size:.95rem;color:var(--navy)!important;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.lp .nav-phone svg{width:16px;height:16px;color:var(--gold)}
+.lp .nav-phone:hover{color:var(--gold-600)!important}
+.lp .nav:not(.is-solid) .nav-phone{color:#fff!important;text-shadow:0 1px 10px rgba(13,21,33,.42)}
+.lp .nav:not(.is-solid) .nav-phone:hover{color:var(--gold-300)!important}
+.lp .burger{display:flex;flex-direction:column;gap:5px;width:42px;height:42px;align-items:center;justify-content:center;border-radius:3px}
+.lp .burger span{width:24px;height:2px;background:var(--navy);transition:transform .3s var(--ease),opacity .3s var(--ease)}
+.lp .nav:not(.is-solid) .burger span{background:#fff}
+.lp .nav.is-open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.lp .nav.is-open .burger span:nth-child(2){opacity:0}
+.lp .nav.is-open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.lp .mobile-menu{position:fixed;inset:0 0 0 0;top:0;background:var(--navy-900);z-index:80;display:flex;flex-direction:column;justify-content:center;padding:90px 32px 40px;gap:8px;transform:translateY(-100%);transition:transform .55s var(--ease);visibility:hidden}
+.lp .nav.is-open ~ .mobile-menu,.lp .mobile-menu.is-open{transform:translateY(0);visibility:visible}
+.lp .mobile-menu a{font-family:var(--font-d);font-weight:800;font-size:2rem;color:#fff!important;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.lp .mobile-menu a:hover{color:var(--gold-300)!important}
+.lp .mobile-menu .mm-foot{margin-top:28px;color:rgba(255,255,255,.6);font-size:.95rem;display:flex;flex-direction:column;gap:6px}
+.lp .mobile-menu .mm-foot a{font-size:1rem;color:var(--gold-300)!important;border:0;padding:0}
+/* ============ HERO ============ */
+.lp .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--navy-900)}
+.lp .hero-bg{position:absolute;inset:-8% 0 0 0;z-index:0;will-change:transform}
+.lp .hero-bg .ph{position:absolute;inset:0;border-radius:0;height:116%}
+.lp .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(22,37,58,.72) 0%,rgba(22,37,58,.56) 38%,rgba(22,37,58,.92) 100%)}
+.lp .hero-overlay::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 18% 90%,rgba(176,139,91,.22),transparent 55%)}
+.lp #particles{position:absolute;inset:0;z-index:2;pointer-events:none}
+.lp .hero-inner{position:relative;z-index:3;width:100%;max-width:var(--maxw);margin:0 auto;padding:clamp(112px,15vh,160px) 24px clamp(56px,8vw,96px)}
+.lp .hero-eyebrow{color:var(--gold-300);font-family:var(--font-d);font-weight:700;font-size:.8rem;letter-spacing:.26em;text-transform:uppercase;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.lp .hero h1{color:#fff;font-size:var(--fs-display);font-weight:800;margin:26px 0 0;max-width:17ch;text-wrap:balance;letter-spacing:-.025em}
+.lp .hero h1 em{font-style:normal;color:var(--gold-300)}
+.lp .hero-sub{color:rgba(255,255,255,.82);font-size:var(--fs-lead);max-width:54ch;margin-top:26px;text-wrap:pretty}
+.lp .hero-cta{display:flex;flex-wrap:wrap;gap:16px;margin-top:38px;align-items:center}
+.lp .hero-call{color:#fff!important;font-family:var(--font-d);font-weight:700;display:inline-flex;align-items:center;gap:10px;font-size:1rem}
+.lp .hero-call:hover{color:var(--gold-300)!important}
+.lp .hero-call svg{width:18px;height:18px}
+.lp .trust{display:flex;flex-wrap:wrap;gap:14px 30px;margin-top:54px;padding-top:30px;border-top:1px solid rgba(255,255,255,.16)}
+.lp .trust li{display:flex;align-items:center;gap:11px;color:rgba(255,255,255,.9);font-family:var(--font-d);font-weight:600;font-size:.92rem;letter-spacing:.02em}
+.lp .trust svg{width:20px;height:20px;color:var(--gold-300);flex-shrink:0}
+.lp .scroll-hint{position:absolute;right:24px;bottom:30px;z-index:3;display:none;flex-direction:column;align-items:center;gap:10px;color:rgba(255,255,255,.55);font-family:var(--font-d);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;writing-mode:vertical-rl}
+.lp .scroll-hint .sl{width:1px;height:46px;background:linear-gradient(var(--gold-300),transparent);animation:sl 1.9s var(--ease) infinite}
+@keyframes sl{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* ============ ABOUT ============ */
+.lp .about-grid{display:grid;grid-template-columns:1fr;gap:clamp(36px,5vw,64px);align-items:center}
+.lp .about-media{position:relative}
+.lp .about-media .ph{aspect-ratio:4/5}
+.lp .about-badge{position:absolute;right:-6px;bottom:-26px;background:var(--navy);color:#fff;padding:22px 26px;border-radius:4px;box-shadow:0 24px 50px -22px rgba(31,50,73,.7);max-width:230px}
+.lp .about-badge .big{font-family:var(--font-d);font-weight:900;font-size:2.6rem;color:var(--gold-300);line-height:1}
+.lp .about-badge p{font-size:.86rem;color:rgba(255,255,255,.82);margin-top:6px;line-height:1.4}
+.lp .about-body h2{font-size:var(--fs-h2);margin:18px 0 0}
+.lp .about-body .lead{font-size:var(--fs-lead);color:var(--text);font-weight:500;margin-top:22px;text-wrap:pretty}
+.lp .about-body p.muted{color:var(--text-2);margin-top:16px;text-wrap:pretty}
+.lp .timeline{display:flex;flex-direction:column;gap:0;margin:34px 0 6px;border-left:2px solid var(--line)}
+.lp .timeline li{position:relative;padding:0 0 22px 26px}
+.lp .timeline li:last-child{padding-bottom:0}
+.lp .timeline li::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px var(--bg)}
+.lp .timeline .yr{font-family:var(--font-d);font-weight:800;color:var(--navy);font-size:1.02rem}
+.lp .timeline .tx{color:var(--text-2);font-size:.96rem}
+.lp .about-cta{margin-top:30px}
+/* ============ STATS STRIP ============ */
+.lp .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:4px;overflow:hidden;margin-top:8px}
+.lp .stat{background:var(--surface);padding:26px 22px;text-align:left}
+.lp .stat .num{font-family:var(--font-d);font-weight:900;font-size:clamp(2.1rem,4vw,2.9rem);color:var(--navy);line-height:1;letter-spacing:-.03em}
+.lp .stat .num small{color:var(--gold);font-size:.55em;vertical-align:super}
+.lp .stat .lab{font-size:.84rem;color:var(--text-2);margin-top:8px;font-weight:500;letter-spacing:.02em}
+/* ============ SERVICES ============ */
+.lp .services{background:var(--surface);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.lp .svc-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.lp .svc{position:relative;background:var(--bg);border:1px solid var(--line-soft);border-radius:5px;overflow:hidden;transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .45s var(--ease);display:flex;flex-direction:column}
+.lp .svc:hover{transform:translateY(-6px);box-shadow:0 30px 60px -34px rgba(31,50,73,.45);border-color:var(--gold-300)}
+.lp .svc .ph{aspect-ratio:16/10;border-radius:0}
+.lp .svc-body{padding:26px 26px 30px;display:flex;flex-direction:column;flex:1}
+.lp .svc-n{display:none}
+.lp .svc h3{font-size:var(--fs-h3);margin:10px 0 0}
+.lp .svc p{color:var(--text-2);margin-top:12px;font-size:.98rem;flex:1;text-wrap:pretty}
+.lp .svc .svc-tag{position:absolute;top:16px;left:16px;z-index:2;background:var(--gold);color:#fff;font-family:var(--font-d);font-weight:700;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;padding:6px 12px;border-radius:3px}
+.lp .svc .link-arrow{margin-top:20px}
+.lp .svc--feat .ph{aspect-ratio:16/9}
+.lp .svc-foot{display:flex;justify-content:center;margin-top:46px}
+/* ============ REVIEWS ============ */
+.lp .reviews{background:var(--navy-900);color:#fff;position:relative;overflow:hidden}
+.lp .reviews::before{content:"";position:absolute;top:-30%;right:-10%;width:60%;height:120%;background:radial-gradient(circle,rgba(176,139,91,.16),transparent 65%);pointer-events:none}
+.lp .reviews .eyebrow{color:var(--gold-300)}
+.lp .reviews .eyebrow::before{color:#fff;opacity:.4}
+.lp .reviews .sec-head h2{color:#fff}
+.lp .rev-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:clamp(40px,5vw,64px)}
+.lp .rev-top .sec-head{margin-bottom:0}
+.lp .gbadge{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:18px 22px;flex-shrink:0}
+.lp .gbadge .grate{font-family:var(--font-d);font-weight:900;font-size:2.4rem;line-height:1;color:#fff}
+.lp .gbadge .gstars{color:var(--gold-300);font-size:1rem;letter-spacing:2px}
+.lp .gbadge .gmeta{font-size:.8rem;color:rgba(255,255,255,.66);margin-top:3px}
+.lp .gbadge .glogo{font-family:var(--font-d);font-weight:700;font-size:.9rem}
+.lp .gbadge .glogo b:nth-child(1){color:#4285F4}.lp .gbadge .glogo b:nth-child(2){color:#EA4335}.lp .gbadge .glogo b:nth-child(3){color:#FBBC05}.lp .gbadge .glogo b:nth-child(4){color:#4285F4}.lp .gbadge .glogo b:nth-child(5){color:#34A853}.lp .gbadge .glogo b:nth-child(6){color:#EA4335}
+.lp .rev-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.lp .rev{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:28px;display:flex;flex-direction:column;gap:14px;transition:transform .4s var(--ease),background .4s var(--ease)}
+.lp .rev:hover{transform:translateY(-5px);background:rgba(255,255,255,.08)}
+.lp .rev .stars{color:var(--gold-300);letter-spacing:3px;font-size:.95rem}
+.lp .rev p{color:rgba(255,255,255,.88);font-size:1.02rem;line-height:1.6;text-wrap:pretty}
+.lp .rev-who{display:flex;align-items:center;gap:13px;margin-top:auto}
+.lp .rev-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(140deg,var(--gold),var(--gold-600));display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:800;color:#fff;font-size:1.05rem;flex-shrink:0}
+.lp .rev-who .rn{font-family:var(--font-d);font-weight:700;font-size:.95rem;color:#fff}
+.lp .rev-who .rl{font-size:.78rem;color:rgba(255,255,255,.55)}
+.lp .rev-who .gg{margin-left:auto;width:22px;height:22px;opacity:.8}
+.lp .rev-foot{display:flex;justify-content:center;margin-top:46px}
+/* ============ PORTFOLIO ============ */
+.lp .pf-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.lp .pf{position:relative;border-radius:5px;overflow:hidden;cursor:pointer;aspect-ratio:4/3}
+.lp .pf .ph{position:absolute;inset:0;border-radius:0;height:100%}
+.lp .pf-cap{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;background:linear-gradient(180deg,transparent 40%,rgba(22,37,58,.86));opacity:0;transform:translateY(8px);transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.lp .pf:hover .pf-cap{opacity:1;transform:none}
+.lp .pf-cap .pf-cat{font-family:var(--font-d);font-weight:700;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-300)}
+.lp .pf-cap .pf-ttl{font-family:var(--font-d);font-weight:800;font-size:1.25rem;color:#fff;margin-top:5px}
+.lp .pf-cap .pf-zoom{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center}
+.lp .pf-cap .pf-zoom svg{width:18px;height:18px;color:#fff}
+.lp .pf--tall{aspect-ratio:4/3}
+.lp .pf-foot{display:flex;justify-content:center;margin-top:46px}
+/* lightbox */
+.lp .lb{position:fixed;inset:0;z-index:200;background:rgba(13,21,33,.93);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .35s var(--ease)}
+.lp .lb.is-open{opacity:1;visibility:visible}
+.lp .lb-card{width:min(880px,92vw);max-height:86vh;display:flex;flex-direction:column;transform:scale(.96);transition:transform .4s var(--ease)}
+.lp .lb.is-open .lb-card{transform:none}
+.lp .lb-card .ph{aspect-ratio:16/10;width:100%}
+.lp .lb-meta{padding:18px 4px 0;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.lp .lb-meta .pf-cat{color:var(--gold-300)}
+.lp .lb-meta h4{color:#fff;font-size:1.4rem}
+.lp .lb-close{position:fixed;top:22px;right:22px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:#fff;z-index:201}
+.lp .lb-close:hover{background:var(--gold)}
+.lp .lb-close svg{width:22px;height:22px}
+.lp .lb-nav{position:fixed;top:50%;transform:translateY(-50%);width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;z-index:201}
+.lp .lb-nav:hover{background:var(--gold)}
+.lp .lb-nav svg{width:24px;height:24px}
+.lp .lb-prev{left:18px}.lp .lb-next{right:18px}
+/* ============ WHY ============ */
+.lp .why{background:var(--surface);border-top:1px solid var(--line-soft)}
+.lp .why-grid{display:grid;grid-template-columns:1fr;gap:clamp(36px,5vw,60px);align-items:start}
+.lp .why-intro p{color:var(--text-2);font-size:var(--fs-lead);margin-top:22px;text-wrap:pretty}
+.lp .why-cards{display:grid;grid-template-columns:1fr;gap:16px}
+.lp .wc{display:flex;gap:18px;align-items:flex-start;padding:26px;background:var(--bg);border:1px solid var(--line-soft);border-radius:5px;transition:transform .4s var(--ease),border-color .4s var(--ease)}
+.lp .wc:hover{transform:translateX(6px);border-color:var(--gold-300)}
+.lp .wc-ico{width:54px;height:54px;border-radius:5px;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lp .wc-ico svg{width:26px;height:26px;color:var(--gold-300)}
+.lp .wc h3{font-size:1.3rem}
+.lp .wc p{color:var(--text-2);font-size:.96rem;margin-top:7px;text-wrap:pretty}
+.lp .why-cta{margin-top:30px}
+/* ============ HOW IT WORKS ============ */
+.lp .how{background:var(--navy);color:#fff;position:relative;overflow:hidden}
+.lp .how::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 1px,transparent 1px 30px);pointer-events:none}
+.lp .how .eyebrow{color:var(--gold-300)}.lp .how .eyebrow::before{color:#fff;opacity:.4}
+.lp .how .sec-head h2{color:#fff}
+.lp .how .sec-head{text-align:center;margin-left:auto;margin-right:auto}
+.lp .how .sec-head .eyebrow{justify-content:center}
+.lp .steps{display:grid;grid-template-columns:1fr;gap:14px;position:relative}
+.lp .step{position:relative;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:34px 30px;transition:transform .4s var(--ease),background .4s var(--ease)}
+.lp .step:hover{transform:translateY(-6px);background:rgba(255,255,255,.07)}
+.lp .step .step-n{font-family:var(--font-d);font-weight:900;font-size:3.4rem;color:rgba(176,139,91,.32);line-height:.9;letter-spacing:-.04em}
+.lp .step h3{color:#fff;font-size:1.5rem;margin:14px 0 0}
+.lp .step p{color:rgba(255,255,255,.72);margin-top:10px;font-size:1rem;text-wrap:pretty}
+.lp .how-cta{display:flex;justify-content:center;margin-top:46px}
+/* ============ CONTACT ============ */
+.lp .contact-grid{display:grid;grid-template-columns:1fr;gap:clamp(34px,4vw,52px);align-items:start}
+.lp .form-card{background:var(--surface);border:1px solid var(--line-soft);border-radius:7px;padding:clamp(26px,3.5vw,44px);box-shadow:0 40px 80px -50px rgba(31,50,73,.4)}
+.lp .form-card h3{font-size:clamp(1.6rem,2.6vw,2.2rem);margin-bottom:6px}
+.lp .form-card .fc-sub{color:var(--text-2);margin-bottom:26px}
+.lp .field{margin-bottom:18px}
+.lp .field label{display:block;font-family:var(--font-d);font-weight:600;font-size:.82rem;letter-spacing:.04em;color:var(--navy);margin-bottom:8px}
+.lp .field label .req{color:var(--gold-600)}
+.lp .input{width:100%;font-family:var(--font-b);font-size:1rem;color:var(--navy);background:var(--bg);border:1.5px solid var(--line);border-radius:4px;padding:14px 16px;transition:border-color .25s var(--ease),box-shadow .25s var(--ease)}
+.lp .input::placeholder{color:#9AA7B5}
+.lp .input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(176,139,91,.14)}
+.lp textarea.input{resize:vertical;min-height:120px}
+.lp select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%235A6B7F' stroke-width='2'%3E%3Cpath d='M2 5l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:42px}
+.lp .field-row{display:grid;grid-template-columns:1fr;gap:18px}
+.lp .form-submit{width:100%;margin-top:6px}
+.lp .form-note{font-size:.82rem;color:var(--text-2);margin-top:14px;text-align:center}
+.lp .form-ok{display:none;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:30px 10px}
+.lp .form-ok.is-on{display:flex}
+.lp .form-ok .ok-ic{width:64px;height:64px;border-radius:50%;background:rgba(34,160,100,.12);display:flex;align-items:center;justify-content:center}
+.lp .form-ok .ok-ic svg{width:32px;height:32px;color:#22A064}
+.lp .form-ok h4{font-size:1.5rem}
+.lp .form-ok p{color:var(--text-2)}
+.lp .form.is-hidden{display:none}
+.lp .contact-aside{display:flex;flex-direction:column;gap:22px}
+.lp .map{border-radius:7px;overflow:hidden;border:1px solid var(--line-soft);height:300px;background:var(--line-soft)}
+.lp .map iframe{width:100%;height:100%;border:0;display:block;filter:grayscale(.3) contrast(1.04)}
+.lp .cinfo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lp .ci{background:var(--surface);border:1px solid var(--line-soft);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.lp .ci-ic{width:40px;height:40px;border-radius:5px;background:var(--gold-100);display:flex;align-items:center;justify-content:center}
+.lp .ci-ic svg{width:20px;height:20px;color:var(--gold-600)}
+.lp .ci .ci-l{font-family:var(--font-d);font-weight:700;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-2)}
+.lp .ci .ci-v{font-family:var(--font-d);font-weight:700;color:var(--navy);font-size:1.02rem;line-height:1.3}
+.lp .ci a.ci-v{color:var(--navy)!important}.lp .ci a.ci-v:hover{color:var(--gold-600)!important}
+/* ============ FOOTER ============ */
+.lp .footer{background:var(--navy-900);color:rgba(255,255,255,.7);padding:clamp(56px,7vw,88px) 0 30px}
+.lp .foot-grid{display:grid;grid-template-columns:1fr;gap:40px;padding-bottom:46px;border-bottom:1px solid rgba(255,255,255,.1)}
+.lp .foot-brand img{height:64px;width:auto;margin-bottom:20px}
+.lp .foot-brand p{font-size:.98rem;max-width:34ch;text-wrap:pretty}
+.lp .foot-col h4{color:#fff;font-family:var(--font-d);font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px}
+.lp .foot-col ul{display:flex;flex-direction:column;gap:11px}
+.lp .foot-col a,.lp .foot-col li{color:rgba(255,255,255,.7)!important;font-size:.96rem}
+.lp .foot-col a:hover{color:var(--gold-300)!important}
+.lp .foot-social{display:flex;gap:12px;margin-top:6px}
+.lp .foot-social a{width:42px;height:42px;border-radius:5px;border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.8)!important}
+.lp .foot-social a:hover{background:var(--gold);border-color:var(--gold);color:#fff!important}
+.lp .foot-social svg{width:18px;height:18px}
+.lp .foot-bottom{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding-top:24px;font-size:.84rem;color:rgba(255,255,255,.5)}
+.lp .foot-bottom .fb-tags{display:flex;gap:18px;flex-wrap:wrap}
+.lp .dev{color:rgba(255,255,255,.5);width:100%;text-align:center;margin-top:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px}
+.lp .dev a{color:#FFA300!important;font-weight:700}
+.lp .dev a:hover,.lp .dev a:focus,.lp .dev a:visited,.lp .dev a:active{color:#FFA300!important;text-decoration:underline!important}
+/* ============ REVEAL ============ */
+.lp .reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.lp .reveal.is-in{opacity:1;transform:none}
+.lp .rgroup>*{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.lp .rgroup.is-in>*{opacity:1;transform:none}
+.lp .rgroup.is-in>*:nth-child(2){transition-delay:.08s}
+.lp .rgroup.is-in>*:nth-child(3){transition-delay:.16s}
+.lp .rgroup.is-in>*:nth-child(4){transition-delay:.24s}
+.lp .rgroup.is-in>*:nth-child(5){transition-delay:.32s}
+.lp .rgroup.is-in>*:nth-child(6){transition-delay:.40s}
+.lp .rgroup.is-in>*:nth-child(7){transition-delay:.48s}
+@media (prefers-reduced-motion:reduce){.lp *{animation:none!important;transition:none!important}.lp .reveal,.lp .rgroup>*{opacity:1;transform:none}}
+/* ============ RESPONSIVE ============ */
+@media (max-width:599px){
+  .lp .hero-eyebrow{font-size:.68rem;letter-spacing:.16em;line-height:1.7;max-width:100%;overflow-wrap:anywhere}
+  .lp .hero h1{max-width:9ch}
+  .lp .trust{display:grid;grid-template-columns:1fr;gap:12px;margin-top:38px}
+  .lp .trust li{font-size:.86rem;min-width:0}
+}
+@media (min-width:600px){
+  .lp .field-row{grid-template-columns:1fr 1fr}
+  .lp .svc-grid{grid-template-columns:repeat(2,1fr)}
+  .lp .rev-grid{grid-template-columns:repeat(2,1fr)}
+  .lp .pf-grid{grid-template-columns:repeat(2,1fr)}
+  .lp .stats{grid-template-columns:repeat(4,1fr)}
+}
+@media (min-width:768px){
+  .lp .why-cards{grid-template-columns:1fr}
+  .lp .steps{grid-template-columns:repeat(3,1fr)}
+  .lp .foot-grid{grid-template-columns:2fr 1fr 1fr 1.4fr}
+  .lp .scroll-hint{display:flex}
+}
+@media (min-width:992px){
+  .lp .nav-links{display:flex}
+  .lp .nav-cta{display:flex}
+  .lp .burger{display:none}
+  .lp .about-grid{grid-template-columns:.85fr 1.15fr}
+  .lp .svc-grid{grid-template-columns:repeat(3,1fr)}
+  .lp .svc--feat{grid-column:span 1}
+  .lp .rev-grid{grid-template-columns:repeat(3,1fr)}
+  .lp .pf-grid{grid-template-columns:repeat(3,1fr)}
+  .lp .pf--wide{grid-column:auto}
+  .lp .why-grid{grid-template-columns:1fr 1.2fr}
+  .lp .why-cards{grid-template-columns:1fr}
+  .lp .contact-grid{grid-template-columns:1.05fr .95fr}
+}
+@media (min-width:1280px){
+  .lp .wrap,.lp .nav-inner,.lp .hero-inner{padding-left:40px;padding-right:40px}
+}
+</style>
+</helmet>
+<div class="lp">
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/#top" class="logo" aria-label="MP Renovation Service home"><img class="logo-light" src="assets/logo-white.png" alt="MP Renovation Service"><img class="logo-dark" src="assets/logo-color.png" alt="MP Renovation Service"></a>
+    <div class="nav-links">
+      <a href="/#about">About</a>
+      <a href="/#services">Services</a>
+      <a href="/#portfolio">Portfolio</a>
+      <a href="/#reviews">Reviews</a>
+      <a href="/#process">Process</a>
+    </div>
+    <div class="nav-cta">
+      <a href="tel:+13018145360" class="nav-phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>(301) 814-5360</a>
+      <a href="/#contact" class="btn">Start Your Project<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mm">
+  <a href="/#about">About</a>
+  <a href="/#services">Services</a>
+  <a href="/#portfolio">Portfolio</a>
+  <a href="/#reviews">Reviews</a>
+  <a href="/#process">Process</a>
+  <a href="/#contact">Get a Quote</a>
+  <div class="mm-foot">
+    <span>Mon-Sat · 7am to 6pm</span>
+    <a href="tel:+13018145360">(301) 814-5360</a>
+    <a href="mailto:mprenovationservice@gmail.com">mprenovationservice@gmail.com</a>
+  </div>
+</div>
+
+<header class="hero" id="top">
+  <div class="hero-bg" id="hero-bg">
+    <div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/hero-paver-driveway.jpg" alt="Finished paver driveway at a Silver Spring area home"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <canvas id="particles"></canvas>
+  <div class="hero-inner">
+    <h1>Expert Paver and Masonry Services in <em>The Silver Spring</em> Area.</h1>
+    <p class="hero-sub">Your home deserves professional care. We bring 20 years of proven results to every paver and masonry project in Silver Spring.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn--lg">Start Your Project Today<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="tel:+13018145360" class="hero-call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>(301) 814-5360</a>
+    </div>
+    <ul class="trust">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>Licensed &amp; Insured</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>20 Years of Experience</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-6 0v4"/><rect x="4" y="9" width="16" height="11" rx="2"/></svg>Free Quote in 24 Hours</li>
+    </ul>
+  </div>
+  <div class="scroll-hint">Scroll<span class="sl"></span></div>
+</header>
+
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-media reveal">
+        <div class="ph ph--light has-img"><img class="site-img" src="assets/site-images/about-front-entry.jpg" alt="Finished masonry front steps and paver walkway at a Maryland home"></div>
+        <div class="about-badge"><div class="big" data-count="20"><span class="cv">20</span></div><p>Years building safe, lasting outdoor spaces across Maryland.</p></div>
+      </div>
+      <div class="about-body">
+        <p class="eyebrow" data-n="01"><span class="eb-line"></span>About Us</p>
+        <h2 class="reveal">We Know Maryland Homes Inside and Out</h2>
+        <p class="lead reveal">Serving Maryland homeowners with premium paver and masonry solutions for over 20 years.</p>
+        <p class="muted reveal">We are a fully licensed and insured contractor in Silver Spring focused on structural integrity and high quality outdoor renovations. Owner Maurineu Neres left Bahia 21 years ago and built MP Renovation from the ground up. Today his five person crew treats every job like it is their own home.</p>
+        <ul class="timeline reveal">
+          <li><div class="yr">2005</div><div class="tx">Arrived in Maryland to chase a bigger dream.</div></li>
+          <li><div class="yr">2011</div><div class="tx">Founded MP Renovation Service in Silver Spring.</div></li>
+          <li><div class="yr">Today</div><div class="tx">A trusted five person crew with 20 years in the trade.</div></li>
+        </ul>
+        <div class="stats rgroup">
+          <div class="stat" data-count="20"><div class="num"><span class="cv">20</span><small>+</small></div><div class="lab">Years in the trade</div></div>
+          <div class="stat" data-count="5"><div class="num"><span class="cv">5</span></div><div class="lab">Specialist crew</div></div>
+          <div class="stat" data-count="24"><div class="num"><span class="cv">24</span><small>h</small></div><div class="lab">Quote turnaround</div></div>
+          <div class="stat" data-count="100"><div class="num"><span class="cv">100</span><small>%</small></div><div class="lab">Licensed &amp; insured</div></div>
+        </div>
+        <div class="about-cta reveal"><a href="#contact" class="btn">Hire Local Experts<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec services" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-n="02"><span class="eb-line"></span>Services</p>
+      <h2 class="reveal">Specialized Solutions for Your Property</h2>
+      <p class="reveal">Seven trades, one accountable crew. Here is what we build best across Silver Spring and the surrounding area.</p>
+    </div>
+    <div class="svc-grid rgroup">
+      <article class="svc svc--feat">
+        <div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/service-paver-driveway.jpg" alt="Finished interlocking paver driveway"><span class="svc-tag">Most Requested</span></div>
+        <div class="svc-body"><div class="svc-n">01</div><h3>Paver</h3><p>Stop driving on cracked, uneven surfaces. We build beautiful, strong driveways that stay flat and look great.</p><a href="#contact" class="link-arrow">Get a quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc svc--feat">
+        <div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/portfolio-brick-steps.jpg" alt="Finished brick steps and masonry porch"><span class="svc-tag">Most Requested</span></div>
+        <div class="svc-body"><div class="svc-n">02</div><h3>Masonry</h3><p>Protect your home from the outside in. We build solid brick and stone features that survive any storm.</p><a href="#contact" class="link-arrow">Get a quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/portfolio-backyard-patio.jpg" alt="Finished backyard paver patio and hardscaping"></div>
+        <div class="svc-body"><div class="svc-n">03</div><h3>Hardscaping</h3><p>Upgrade your outdoor space with zero stress. We build solid stone features that handle heavy rain and look amazing.</p><a href="#contact" class="link-arrow">Get a quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/service-demolition-prep.jpg" alt="Clean demolition and site preparation result"></div>
+        <div class="svc-body"><div class="svc-n">04</div><h3>Demolition</h3><p>We safely remove old structures so you can start fresh. Fast, clean tear downs with no damage to your yard.</p><a href="#contact" class="link-arrow">Get a quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/service-flooring.jpg" alt="Finished interior flooring installation"></div>
+        <div class="svc-body"><div class="svc-n">05</div><h3>Flooring</h3><p>Get a fresh new look for your home interior fast. We install high quality floors with zero gaps or messes.</p><a href="#contact" class="link-arrow">Get a quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/service-custom-deck.jpg" alt="Finished custom cedar deck"></div>
+        <div class="svc-body"><div class="svc-n">06</div><h3>Deck</h3><p>Ready for summer BBQs? We build safe, beautiful outdoor decks fast so you can start enjoying your yard.</p><a href="#contact" class="link-arrow">Get a quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="svc">
+        <div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/service-framing.jpg" alt="Clean residential wood framing structure"></div>
+        <div class="svc-body"><div class="svc-n">07</div><h3>Framing</h3><p>The secret to a great house is a solid frame. We build the strong wood structures your home needs to stand tall.</p><a href="#contact" class="link-arrow">Get a quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+    </div>
+    <div class="svc-foot reveal"><a href="#contact" class="btn btn--lg">Tell Us What You Need<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+
+<section class="sec reviews" id="reviews">
+  <div class="wrap">
+    <div class="rev-top">
+      <div class="sec-head">
+        <p class="eyebrow" data-n="03"><span class="eb-line"></span>Reviews</p>
+        <h2 class="reveal">Proof That We Deliver Exactly What We Promise</h2>
+      </div>
+      <div class="gbadge reveal">
+        <div class="grate">4.9</div>
+        <div><div class="gstars">★★★★★</div><div class="glogo"><b>G</b><b>o</b><b>o</b><b>g</b><b>l</b><b>e</b> Reviews</div><div class="gmeta">Based on 60+ verified jobs</div></div>
+      </div>
+    </div>
+    <div class="rev-grid rgroup">
+      <article class="rev"><div class="stars">★★★★★</div><p>Our driveway was cracked for years. MP tore it out and laid new pavers in three days. It still looks perfect two winters later.</p><div class="rev-who"><div class="rev-av">J</div><div><div class="rn">James Holloway</div><div class="rl">Four Corners, MD</div></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>The brick steps on our porch were crumbling. Maurineu showed up on time, gave a fair quote, and the stonework is beautiful.</p><div class="rev-who"><div class="rev-av">P</div><div><div class="rn">Patricia Nguyen</div><div class="rl">Wheaton, MD</div></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>They built a retaining wall and patio in our backyard. Clean crew, no mess left behind, and the price matched the quote exactly.</p><div class="rev-who"><div class="rev-av">D</div><div><div class="rn">Daniel Cho</div><div class="rl">Takoma Park, MD</div></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>Quote came back within a day. The whole paver walkway was done before the weekend. Very professional team.</p><div class="rev-who"><div class="rev-av">K</div><div><div class="rn">Karen Mitchell</div><div class="rl">Kemp Mill, MD</div></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>We had drainage problems flooding the yard. Their hardscaping fixed it completely. First heavy rain and not a single puddle.</p><div class="rev-who"><div class="rev-av">R</div><div><div class="rn">Robert Alvarez</div><div class="rl">Aspen Hill, MD</div></div></div></article>
+      <article class="rev"><div class="stars">★★★★★</div><p>Honest, licensed, and they actually care about the details. Hard to find these days. Already booked them for our deck.</p><div class="rev-who"><div class="rev-av">L</div><div><div class="rn">Linda Schwartz</div><div class="rl">Colesville, MD</div></div></div></article>
+    </div>
+    <div class="rev-foot reveal"><a href="#contact" class="btn btn--light btn--lg">Join Our Happy Clients<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+
+<section class="sec" id="portfolio">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-n="04"><span class="eb-line"></span>Portfolio</p>
+      <h2 class="reveal">Explore Our Latest Projects</h2>
+      <p class="reveal">Real work for real Maryland homeowners. Tap any project to take a closer look.</p>
+    </div>
+    <div class="pf-grid rgroup">
+      <div class="pf pf--wide" data-cat="Paver Driveway" data-title="Paver Driveway Restoration" data-variant="navy" data-img="assets/site-images/service-paver-driveway.jpg"><div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/service-paver-driveway.jpg" alt="Finished paver driveway restoration in Four Corners"></div><div class="pf-cap"><div class="pf-zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></div><div class="pf-cat">Paver Driveway</div><div class="pf-ttl">Paver Driveway Restoration</div></div></div>
+      <div class="pf" data-cat="Masonry" data-title="Natural Stone Retaining Wall" data-variant="light" data-img="assets/site-images/portfolio-retaining-wall.jpg"><div class="ph ph--light has-img"><img class="site-img" src="assets/site-images/portfolio-retaining-wall.jpg" alt="Natural stone retaining wall in Wheaton"></div><div class="pf-cap"><div class="pf-zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></div><div class="pf-cat">Masonry</div><div class="pf-ttl">Natural Stone Retaining Wall</div></div></div>
+      <div class="pf" data-cat="Masonry" data-title="Brick Front Steps and Porch" data-variant="navy" data-img="assets/site-images/portfolio-brick-steps.jpg"><div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/portfolio-brick-steps.jpg" alt="Brick front steps and porch in Takoma Park"></div><div class="pf-cap"><div class="pf-zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></div><div class="pf-cat">Masonry</div><div class="pf-ttl">Brick Front Steps and Porch</div></div></div>
+      <div class="pf" data-cat="Hardscaping" data-title="Backyard Paver Patio" data-variant="light" data-img="assets/site-images/portfolio-backyard-patio.jpg"><div class="ph ph--light has-img"><img class="site-img" src="assets/site-images/portfolio-backyard-patio.jpg" alt="Backyard paver patio in Kemp Mill"></div><div class="pf-cap"><div class="pf-zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></div><div class="pf-cat">Hardscaping</div><div class="pf-ttl">Backyard Paver Patio</div></div></div>
+      <div class="pf" data-cat="Hardscaping" data-title="Flagstone Garden Walkway" data-variant="navy" data-img="assets/site-images/portfolio-flagstone-walkway.jpg"><div class="ph ph--navy has-img"><img class="site-img" src="assets/site-images/portfolio-flagstone-walkway.jpg" alt="Flagstone garden walkway in Aspen Hill"></div><div class="pf-cap"><div class="pf-zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></div><div class="pf-cat">Hardscaping</div><div class="pf-ttl">Flagstone Garden Walkway</div></div></div>
+      <div class="pf" data-cat="Deck" data-title="Custom Cedar Deck" data-variant="light" data-img="assets/site-images/service-custom-deck.jpg"><div class="ph ph--light has-img"><img class="site-img" src="assets/site-images/service-custom-deck.jpg" alt="Custom cedar deck in Colesville"></div><div class="pf-cap"><div class="pf-zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></div><div class="pf-cat">Deck</div><div class="pf-ttl">Custom Cedar Deck</div></div></div>
+    </div>
+    <div class="pf-foot reveal"><a href="#contact" class="btn btn--lg">Get Results Like These<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+
+<section class="sec why" id="why">
+  <div class="wrap">
+    <div class="why-grid">
+      <div class="why-intro">
+        <p class="eyebrow" data-n="05"><span class="eb-line"></span>Why Choose Us</p>
+        <h2 class="reveal" style="font-size:var(--fs-h2);margin-top:18px">Why Maryland Homeowners Trust Us</h2>
+        <p class="reveal">Your home deserves a specialized team that knows exactly how to build safe, long lasting outdoor spaces.</p>
+        <p class="reveal">We bring two decades of hands on experience and strict licensing to every project so you get a smooth, professional process from the first call to the final cleanup, with zero stress and total property protection.</p>
+        <div class="why-cta reveal"><a href="#contact" class="btn">Make the Smart Choice<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </div>
+      <div class="why-cards rgroup">
+        <div class="wc"><div class="wc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></div><div><h3>Licensed &amp; Insured</h3><p>A fully licensed and insured Silver Spring contractor. Your property is protected from the first day to the last.</p></div></div>
+        <div class="wc"><div class="wc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><h3>20 Years of Experience</h3><p>Two decades of hands on paver and masonry work. We have seen every Maryland soil, slope, and storm problem.</p></div></div>
+        <div class="wc"><div class="wc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div><div><h3>Local Professionals</h3><p>A local crew that knows Silver Spring permits and neighborhoods. We answer the phone and show up on time.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec how" id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-n="06"><span class="eb-line"></span>How It Works</p>
+      <h2 class="reveal">Stop Waiting. Start Building.</h2>
+    </div>
+    <div class="steps rgroup">
+      <div class="step"><div class="step-n">01</div><h3>Contact Us</h3><p>Fill out the form below and tell us what you need. It takes two minutes.</p></div>
+      <div class="step"><div class="step-n">02</div><h3>Get Your Quote</h3><p>Fast pricing with zero surprises. Most quotes are back within 24 hours.</p></div>
+      <div class="step"><div class="step-n">03</div><h3>Sit Back and Relax</h3><p>Watch your project take shape. We handle the work and the cleanup.</p></div>
+    </div>
+    <div class="how-cta reveal"><a href="#contact" class="btn btn--light btn--lg">Take the First Step<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-n="07"><span class="eb-line"></span>Get Started</p>
+      <h2 class="reveal">Tell Us What You Need</h2>
+      <p class="reveal">Send us the details and get a free, no pressure quote within 24 hours. We serve Silver Spring and the surrounding area.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="form-card reveal">
+        <form class="form" id="form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+          <input type="hidden" name="subject" value="New quote request from MP Renovation website">
+          <input type="hidden" name="from_name" value="MP Renovation Website">
+          <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none">
+          <h3>Request Your Free Quote</h3>
+          <p class="fc-sub">No pressure. No obligation. Just honest pricing.</p>
+          <div class="field-row">
+            <div class="field"><label for="f-name">Full Name <span class="req">*</span></label><input class="input" id="f-name" name="name" type="text" placeholder="Jane Doe" required></div>
+            <div class="field"><label for="f-phone">Phone <span class="req">*</span></label><input class="input" id="f-phone" name="phone" type="tel" placeholder="(301) 000-0000" required></div>
+          </div>
+          <div class="field"><label for="f-email">Email</label><input class="input" id="f-email" name="email" type="email" placeholder="you@email.com"></div>
+          <div class="field"><label for="f-service">Service Needed <span class="req">*</span></label>
+            <select class="input" id="f-service" name="service" required>
+              <option value="" selected disabled>Choose a service</option>
+              <option>Paver</option><option>Masonry</option><option>Hardscaping</option><option>Demolition</option><option>Flooring</option><option>Deck</option><option>Framing</option><option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field"><label for="f-msg">Project Details</label><textarea class="input" id="f-msg" name="message" placeholder="Tell us about your driveway, patio, wall, or project."></textarea></div>
+          <button type="submit" class="btn form-submit btn--lg">Get My Free Quote<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="form-note">We reply within 24 hours, Monday to Saturday.</p>
+        </form>
+        <div class="form-ok" id="form-ok">
+          <div class="ok-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h4>Thank you</h4>
+          <p>Your request is in. We will call or text you back within 24 hours with your free quote.</p>
+        </div>
+      </div>
+      <div class="contact-aside reveal">
+        <div class="map"><iframe title="MP Renovation service area, Silver Spring MD" src="https://www.google.com/maps?q=Silver%20Spring%2C%20MD&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        <div class="cinfo">
+          <div class="ci"><div class="ci-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></div><div class="ci-l">Call or Text</div><a href="tel:+13018145360" class="ci-v">(301) 814-5360</a></div>
+          <div class="ci"><div class="ci-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><div class="ci-l">Email</div><a href="mailto:mprenovationservice@gmail.com" class="ci-v" style="font-size:.86rem;word-break:break-word">mprenovationservice@gmail.com</a></div>
+          <div class="ci"><div class="ci-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="ci-l">Hours</div><div class="ci-v">Mon to Sat<br>7am to 6pm</div></div>
+          <div class="ci"><div class="ci-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="ci-l">Service Area</div><div class="ci-v">Silver Spring, MD<br><span style="font-weight:500;font-size:.84rem;color:var(--text-2)">30 mile radius</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo-white.png" alt="MP Renovation Service">
+        <p>Premium paver and masonry work for Maryland homeowners. Licensed, insured, and built to last.</p>
+        <div class="foot-social">
+          <a href="/#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="/#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="tel:+13018145360" aria-label="Phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col"><h4>Services</h4><ul><li><a href="/#services">Paver</a></li><li><a href="/#services">Masonry</a></li><li><a href="/#services">Hardscaping</a></li><li><a href="/#services">Decks</a></li><li><a href="/#services">Framing</a></li></ul></div>
+      <div class="foot-col"><h4>Company</h4><ul><li><a href="/#about">About Us</a></li><li><a href="/#portfolio">Portfolio</a></li><li><a href="/#reviews">Reviews</a></li><li><a href="/#process">How It Works</a></li></ul></div>
+      <div class="foot-col"><h4>Get in Touch</h4><ul><li><a href="tel:+13018145360">(301) 814-5360</a></li><li><a href="mailto:mprenovationservice@gmail.com">mprenovationservice@gmail.com</a></li><li>Mon to Sat, 7am to 6pm</li><li>Silver Spring, MD · 30 mi radius</li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 MP Renovation Service. All rights reserved.</div>
+      <div class="fb-tags"><span>Licensed &amp; Insured</span><span>Silver Spring, MD</span><span>20 Years in the Trade</span></div>
+      <div class="dev">Developed by <a href="https://eusouts.com/" target="_blank" rel="noopener">Eu Sou TS</a></div>
+    </div>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Project image">
+  <button class="lb-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <button class="lb-nav lb-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg></button>
+  <button class="lb-nav lb-next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+  <div class="lb-card">
+    <div class="ph ph--navy"></div>
+    <div class="lb-meta"><div><div class="pf-cat">Category</div><h4>Title</h4></div></div>
+  </div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = this.el || document.querySelector('.lp');
+    if (!root) return;
+    const $ = (s, c=root) => c.querySelector(s);
+    const $$ = (s, c=root) => Array.from(c.querySelectorAll(s));
+
+    /* ---- Nav scroll state ---- */
+    const nav = $('#nav');
+    const onScroll = () => { if (nav) nav.classList.toggle('is-solid', window.scrollY > 40); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ---- Mobile menu ---- */
+    const burger = $('#burger'), mm = $('#mm');
+    const closeMM = () => { nav && nav.classList.remove('is-open'); mm && mm.classList.remove('is-open'); burger && burger.setAttribute('aria-expanded','false'); document.body.style.overflow=''; };
+    if (burger && mm) {
+      burger.addEventListener('click', () => {
+        const open = !mm.classList.contains('is-open');
+        nav.classList.toggle('is-open', open); mm.classList.toggle('is-open', open);
+        burger.setAttribute('aria-expanded', String(open));
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+      $$('a', mm).forEach(a => a.addEventListener('click', closeMM));
+    }
+
+    /* ---- Count up ---- */
+    this._count = (el) => {
+      const target = parseFloat(el.getAttribute('data-count'));
+      const dec = (el.getAttribute('data-count').split('.')[1]||'').length;
+      const t0 = performance.now(), dur = 1500;
+      const numEl = el.querySelector('.cv') || el;
+      const tick = (t) => { const p = Math.min(1,(t-t0)/dur); const v = (1-Math.pow(1-p,3))*target; numEl.textContent = v.toFixed(dec); if (p<1) requestAnimationFrame(tick); else numEl.textContent = target.toFixed(dec); };
+      requestAnimationFrame(tick);
+    };
+
+    /* ---- Reveal on scroll (IntersectionObserver + scroll fallback) ---- */
+    const reveals = $$('.reveal, .rgroup');
+    const counters = $$('[data-count]');
+    const revealEl = (el) => { if (!el.classList.contains('is-in')) el.classList.add('is-in'); };
+    const fireCount = (el) => { if (!el._counted) { el._counted = true; this._count(el); } };
+    const checkReveal = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      reveals.forEach(el => { if (el.getBoundingClientRect().top < vh * 0.9) revealEl(el); });
+      counters.forEach(el => { if (el.getBoundingClientRect().top < vh * 0.92) fireCount(el); });
+    };
+    try {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { revealEl(e.target); io.unobserve(e.target); if (e.target.hasAttribute('data-count')) fireCount(e.target); } });
+      }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
+      reveals.concat(counters).forEach(el => io.observe(el));
+    } catch (_) {}
+    window.addEventListener('scroll', checkReveal, { passive: true });
+    window.addEventListener('resize', checkReveal);
+    checkReveal();
+    setTimeout(checkReveal, 250); setTimeout(checkReveal, 700);
+
+    /* ---- Parallax hero ---- */
+    const hbg = $('#hero-bg');
+    if (hbg) window.addEventListener('scroll', () => { const y = window.scrollY; if (y < window.innerHeight*1.2) hbg.style.transform = 'translateY(' + (y*0.18) + 'px)'; }, { passive: true });
+
+    /* ---- Particles ---- */
+    const cv = $('#particles');
+    if (cv && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const ctx = cv.getContext('2d'); let w,h,parts=[];
+      const resize = () => { const r = cv.parentElement.getBoundingClientRect(); w = cv.width = r.width; h = cv.height = r.height; };
+      resize(); window.addEventListener('resize', resize);
+      const N = Math.min(54, Math.round(w/26));
+      for (let i=0;i<N;i++) parts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.8+.5,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18+.06,a:Math.random()*.5+.15});
+      const draw = () => {
+        ctx.clearRect(0,0,w,h);
+        for (const p of parts){ p.x+=p.vx; p.y+=p.vy; if(p.x<0)p.x=w; if(p.x>w)p.x=0; if(p.y>h)p.y=0; if(p.y<0)p.y=h; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.28); ctx.fillStyle='rgba(201,168,126,'+p.a+')'; ctx.fill(); }
+        this._raf = requestAnimationFrame(draw);
+      };
+      draw();
+    }
+
+    /* ---- Smooth anchor scroll w/ nav offset ---- */
+    $$('a[href^="#"]').forEach(a => a.addEventListener('click', (ev) => {
+      const id = a.getAttribute('href'); if (id === '#' || id.length < 2) return;
+      const tgt = $(id); if (!tgt) return; ev.preventDefault();
+      const top = tgt.getBoundingClientRect().top + window.scrollY - 70;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }));
+
+    /* ---- Form ---- */
+    const form = $('#form');
+    if (form) form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      const ok = $('#form-ok');
+      const submit = $('.form-submit', form);
+      const originalText = submit && submit.innerHTML;
+      if (submit) { submit.disabled = true; submit.innerHTML = 'Sending...'; }
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' }
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.success === false) throw new Error(data.message || 'Unable to send form');
+        form.classList.add('is-hidden'); ok && ok.classList.add('is-on'); form.reset();
+      } catch (_) {
+        alert('We could not send your request right now. Please call or text us at (301) 814-5360.');
+        if (submit) { submit.disabled = false; submit.innerHTML = originalText; }
+      }
+    });
+
+    /* ---- Lightbox ---- */
+    this._lbItems = $$('.pf'); this._lbIdx = 0;
+    const lb = $('#lb'); const lbPh = lb && $('.ph', lb); const lbCat = lb && $('.pf-cat', lb); const lbTtl = lb && $('h4', lb);
+    const openLB = (i) => {
+      this._lbIdx = (i + this._lbItems.length) % this._lbItems.length;
+      const it = this._lbItems[this._lbIdx]; if (!it || !lb) return;
+      const cat = it.getAttribute('data-cat')||''; const ttl = it.getAttribute('data-title')||''; const variant = it.getAttribute('data-variant')||'navy'; const img = it.getAttribute('data-img')||'';
+      lbPh.className = 'ph has-img ' + (variant==='light'?'ph--light':'ph--navy');
+      lbPh.innerHTML = img ? '<img class="site-img" src="'+img+'" alt="'+ttl+'">' : '';
+      lbCat.textContent = cat; lbTtl.textContent = ttl;
+      lb.classList.add('is-open'); document.body.style.overflow='hidden';
+    };
+    const closeLB = () => { lb && lb.classList.remove('is-open'); document.body.style.overflow=''; };
+    this._lbItems.forEach((it, i) => it.addEventListener('click', () => openLB(i)));
+    if (lb) {
+      $('.lb-close', lb).addEventListener('click', closeLB);
+      $('.lb-prev', lb).addEventListener('click', () => openLB(this._lbIdx-1));
+      $('.lb-next', lb).addEventListener('click', () => openLB(this._lbIdx+1));
+      lb.addEventListener('click', (e) => { if (e.target === lb) closeLB(); });
+      document.addEventListener('keydown', (e) => { if (!lb.classList.contains('is-open')) return; if (e.key==='Escape') closeLB(); if (e.key==='ArrowLeft') openLB(this._lbIdx-1); if (e.key==='ArrowRight') openLB(this._lbIdx+1); });
+    }
+  }
+  componentWillUnmount(){ if (this._raf) cancelAnimationFrame(this._raf); }
+  renderVals(){ return {}; }
+}
+</script>
+</body>
+</html>
+
